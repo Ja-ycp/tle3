@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TTL 1 — Technology for Teaching and Learning</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1a2e;
+    --ink-muted: #4a4a6a;
+    --cream: #fdf9f3;
+    --warm-white: #fffef9;
+    --accent: #2d6a4f;
+    --accent-light: #d8f3dc;
+    --accent-mid: #52b788;
+    --gold: #c9a84c;
+    --gold-light: #fef9ec;
+    --border: rgba(26,26,46,0.1);
+    --border-strong: rgba(26,26,46,0.18);
+    --radius: 16px;
+    --radius-sm: 8px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.7;
+    font-size: 16px;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(253,249,243,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+
+  .nav-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+  }
+
+  .nav-brand span {
+    color: var(--accent);
+  }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+  }
+
+  nav ul a {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--ink-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  nav ul a:hover { color: var(--accent); }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 82vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 6rem 2rem 4rem;
+    background: linear-gradient(160deg, #e8f5e9 0%, #fdf9f3 50%, #fff8e1 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(82,183,136,0.12) 0%, transparent 70%);
+    top: -100px;
+    right: -100px;
+    pointer-events: none;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(201,168,76,0.1) 0%, transparent 70%);
+    bottom: -80px;
+    left: -80px;
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    max-width: 780px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    background: var(--accent-light);
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 100px;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    margin-bottom: 1.25rem;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero p {
+    font-size: 1.125rem;
+    color: var(--ink-muted);
+    max-width: 520px;
+    margin: 0 auto 2.5rem;
+    font-weight: 300;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    color: #fff;
+    padding: 14px 32px;
+    border-radius: 100px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .hero-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(45,106,79,0.3);
+  }
+
+  .hero-cta svg { width: 16px; height: 16px; }
+
+  /* ─── SECTION WRAPPER ─── */
+  section { padding: 6rem 2rem; }
+
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+    color: var(--ink);
+  }
+
+  .section-desc {
+    color: var(--ink-muted);
+    max-width: 520px;
+    font-size: 1rem;
+    font-weight: 300;
+    margin-bottom: 3.5rem;
+    line-height: 1.8;
+  }
+
+  /* ─── CARDS ─── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .card {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    transition: transform 0.25s, box-shadow 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-mid));
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px rgba(26,26,46,0.08);
+  }
+
+  .card:hover::before { opacity: 1; }
+
+  .card-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--accent-light);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+  }
+
+  .card-icon svg {
+    width: 24px;
+    height: 24px;
+    stroke: var(--accent);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+
+  .card p {
+    color: var(--ink-muted);
+    font-size: 0.925rem;
+    line-height: 1.75;
+    margin-bottom: 1.5rem;
+    font-weight: 300;
+  }
+
+  .card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--accent);
+    font-weight: 500;
+    font-size: 0.875rem;
+    text-decoration: none;
+    transition: gap 0.2s;
+  }
+
+  .card-link:hover { gap: 10px; }
+
+  .card-link svg {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ─── FEATURED SECTION ─── */
+  .featured {
+    background: var(--ink);
+    color: #fff;
+    padding: 6rem 2rem;
+  }
+
+  .featured .section-label { color: var(--accent-mid); }
+  .featured .section-title { color: #fff; }
+  .featured .section-desc { color: rgba(255,255,255,0.6); }
+
+  .featured-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  @media (max-width: 768px) {
+    .featured-grid { grid-template-columns: 1fr; }
+  }
+
+  .featured-visual {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius);
+    padding: 2.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .feat-stat {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-sm);
+    padding: 1.25rem;
+  }
+
+  .feat-stat-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent-mid);
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+
+  .feat-stat-label {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.5);
+    font-weight: 300;
+  }
+
+  /* ─── NETIQUETTE ─── */
+  .netiquette-section { background: var(--gold-light); }
+
+  .rules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+
+  .rule-card {
+    background: #fff;
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: var(--radius-sm);
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .rule-num {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    background: var(--gold-light);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--gold);
+  }
+
+  .rule-text {
+    font-size: 0.875rem;
+    color: var(--ink-muted);
+    font-weight: 400;
+    line-height: 1.6;
+    padding-top: 4px;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--ink);
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    padding: 3rem 2rem;
+    font-size: 0.875rem;
+  }
+
+  footer a {
+    color: var(--accent-mid);
+    text-decoration: none;
+  }
+
+  footer strong {
+    color: rgba(255,255,255,0.8);
+    display: block;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    width: 48px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-mid));
+    border-radius: 2px;
+    margin-bottom: 2rem;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 640px) {
+    nav ul { display: none; }
+    .cards-grid { grid-template-columns: 1fr; }
+    .rules-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="#">TTL<span>1</span></a>
+  <ul>
+    <li><a href="#modules">Modules</a></li>
+    <li><a href="#edtech">EdTech</a></li>
+    <li><a href="#netiquette">Netiquette</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">Course Portal</div>
+    <h1>Technology for<br><em>Teaching & Learning</em></h1>
+    <p>Explore tools, applications, and guidelines that shape modern, effective digital education environments.</p>
+    <a href="#modules" class="hero-cta">
+      Explore Modules
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- MODULES -->
+<section id="modules">
+  <div class="container">
+    <div class="section-label">Learning Modules</div>
+    <div class="divider"></div>
+    <h2 class="section-title">What You'll Explore</h2>
+    <p class="section-desc">Three core areas guide your journey through technology-enhanced teaching — from flipped classrooms to digital etiquette.</p>
+
+    <div class="cards-grid">
+
+      <!-- Card 1 -->
+      <div class="card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24"><path d="M15 10l-4 4 6 6-4-14-6 14 4-4"/></svg>
+        </div>
+        <h3>Technological Aids for Flipped Classroom</h3>
+        <p>Discover tools and strategies that support the flipped classroom model — where students engage with content at home and deepen understanding in class.</p>
+        <a href="https://sites.google.com/view/technologicalaids/home" target="_blank" class="card-link">
+          Visit Module
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <h3>EdTech Applications & Learning Tasks</h3>
+        <p>A curated collection of educational technology applications paired with structured learning tasks to enhance student engagement and outcomes.</p>
+        <a href="https://sites.google.com/view/edtechapplication/home" target="_blank" class="card-link">
+          Visit Module
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3>Netiquette Guidelines</h3>
+        <p>Essential rules and norms for respectful, productive online communication — a must for students and educators in virtual learning spaces.</p>
+        <a href="https://sites.google.com/view/netiquette-guidelines/home" target="_blank" class="card-link">
+          Visit Module
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- EDTECH FEATURED -->
+<section class="featured" id="edtech">
+  <div class="container">
+    <div class="featured-grid">
+      <div>
+        <div class="section-label">Spotlight</div>
+        <div class="divider" style="background: linear-gradient(90deg, #52b788, #95d5b2);"></div>
+        <h2 class="section-title">EdTech Applications &amp; Learning Tasks</h2>
+        <p class="section-desc">A comprehensive module that brings together the best digital tools available to teachers and learners — mapped to specific, purposeful tasks.</p>
+        <a href="https://sites.google.com/view/edtechapplication/home" target="_blank" class="hero-cta" style="background: var(--accent-mid); color: #fff;">
+          Open Module
+          <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </div>
+
+      <div class="featured-visual">
+        <div class="feat-stat">
+          <div class="feat-stat-val">3</div>
+          <div class="feat-stat-label">Core modules</div>
+        </div>
+        <div class="feat-stat">
+          <div class="feat-stat-val">∞</div>
+          <div class="feat-stat-label">Learning tools</div>
+        </div>
+        <div class="feat-stat">
+          <div class="feat-stat-val">21st</div>
+          <div class="feat-stat-label">Century skills</div>
+        </div>
+        <div class="feat-stat">
+          <div class="feat-stat-val">1:1</div>
+          <div class="feat-stat-label">Device learning</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NETIQUETTE -->
+<section class="netiquette-section" id="netiquette">
+  <div class="container">
+    <div class="section-label">Digital Citizenship</div>
+    <div class="divider" style="background: linear-gradient(90deg, var(--gold), #e8b84b);"></div>
+    <h2 class="section-title">Netiquette Guidelines</h2>
+    <p class="section-desc">Online communication comes with responsibilities. These core principles help learners and educators build respectful digital communities.</p>
+
+    <div class="rules-grid">
+      <div class="rule-card">
+        <div class="rule-num">1</div>
+        <div class="rule-text">Treat others online as you would in person — with respect and kindness.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-num">2</div>
+        <div class="rule-text">Use proper grammar, spelling, and punctuation in all communications.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-num">3</div>
+        <div class="rule-text">Avoid sharing personal or private information about others online.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-num">4</div>
+        <div class="rule-text">Think before you post — digital footprints last longer than you expect.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-num">5</div>
+        <div class="rule-text">Give credit to sources and respect intellectual property online.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-num">6</div>
+        <div class="rule-text">Be mindful of tone — sarcasm and humor can be easily misunderstood.</div>
+      </div>
+    </div>
+
+    <div style="margin-top: 2.5rem; text-align: center;">
+      <a href="https://sites.google.com/view/netiquette-guidelines/home" target="_blank" class="hero-cta" style="background: var(--gold); box-shadow: none;">
+        Full Netiquette Guide
+        <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <strong>Technology for Teaching and Learning — TTL 1</strong>
+  EdTech Applications &amp; Learning Tasks &nbsp;·&nbsp;
+
+</footer>
+
+</body>
+</html>
